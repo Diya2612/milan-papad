@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container">
+    <span class="navbar-brand">Admin Dashboard</span>
+    <button class="btn btn-sm btn-light" onclick="logout()">Logout</button>
+  </div>
+</nav>
+
+<div class="container my-4">
+  <h3>Manage Events</h3>
+  <button class="btn btn-warning mb-3" onclick="showForm()">Add Event</button>
+  
+  <div id="form" class="card mb-3 d-none">
+    <div class="card-body">
+      <h5 id="formTitle">Add Event</h5>
+      <input type="hidden" id="id">
+      <input type="text" id="title" class="form-control mb-2" placeholder="Title" required>
+      <input type="text" id="date" class="form-control mb-2" placeholder="Date" required>
+      <select id="category" class="form-select mb-2">
+        <option value="festival">Festival</option>
+        <option value="workshop">Workshop</option>
+      </select>
+      <textarea id="description" class="form-control mb-2" placeholder="Description"></textarea>
+      <button class="btn btn-success" onclick="saveEvent()">Save</button>
+      <button class="btn btn-secondary" onclick="hideForm()">Cancel</button>
+    </div>
+  </div>
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Date</th>
+        <th>Category</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
+
+<!-- ✅ Modal for Participants -->
+<div class="modal fade" id="participantsModal" tabindex="-1" aria-labelledby="participantsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="participantsModalLabel">Event Participants</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Mobile</th>
+              <th>Registered On</th>
+            </tr>
+          </thead>
+          <tbody id="participantsTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+if (!localStorage.getItem("admin")) location.href = "admin-login.html";
+
+loadEvents();
+
+async function loadEvents() {
+  const res = await fetch("/api/admin/events");
+  const events = await res.json();
+  document.getElementById("tbody").innerHTML = events.map(e => `
+    <tr>
+      <td>${e.title}</td>
+      <td>${e.date}</td>
+      <td>${e.category}</td>
+      <td>
+        <button class="btn btn-sm btn-primary" onclick='editEvent(${JSON.stringify(e)})'>Edit</button>
+        <button class="btn btn-sm btn-info" onclick="viewParticipants('${e._id}', '${e.title}')">View Participants</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteEvent('${e._id}')">Delete</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function showForm() {
+  document.getElementById("form").classList.remove("d-none");
+  document.getElementById("formTitle").textContent = "Add Event";
+  document.getElementById("id").value = "";
+  document.getElementById("title").value = "";
+  document.getElementById("date").value = "";
+  document.getElementById("category").value = "festival";
+  document.getElementById("description").value = "";
+}
+
+function hideForm() {
+  document.getElementById("form").classList.add("d-none");
+}
+
+function editEvent(event) {
+  showForm();
+  document.getElementById("formTitle").textContent = "Edit Event";
+  document.getElementById("id").value = event._id;
+  document.getElementById("title").value = event.title;
+  document.getElementById("date").value = event.date;
+  document.getElementById("category").value = event.category;
+  document.getElementById("description").value = event.description;
+}
+
+async function saveEvent() {
+  const id = document.getElementById("id").value;
+  const data = {
+    title: document.getElementById("title").value,
+    date: document.getElementById("date").value,
+    category: document.getElementById("category").value,
+    description: document.getElementById("description").value
+  };
+  
+  if (id) {
+    await fetch(`/api/admin/events/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+  } else {
+    await fetch("/api/admin/events", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+  }
+  
+  hideForm();
+  loadEvents();
+}
+
+async function deleteEvent(id) {
+  if (confirm("Delete this event?")) {
+    await fetch(`/api/admin/events/${id}`, { method: "DELETE" });
+    loadEvents();
+  }
+}
+
+// ✅ New Function: View participants
+async function viewParticipants(eventId, eventTitle) {
+  const res = await fetch(`/api/admin/event-registrations/${eventId}`);
+  const participants = await res.json();
+
+  const tbody = document.getElementById("participantsTableBody");
+  tbody.innerHTML = participants.length
+    ? participants.map(p => `
+        <tr>
+          <td>${p.name}</td>
+          <td>${p.email}</td>
+          <td>${p.mobile}</td>
+          <td>${new Date(p.createdAt).toLocaleString()}</td>
+        </tr>
+      `).join('')
+    : `<tr><td colspan="4" class="text-center text-muted">No participants yet</td></tr>`;
+
+  document.getElementById("participantsModalLabel").textContent = `Participants - ${eventTitle}`;
+  const modal = new bootstrap.Modal(document.getElementById("participantsModal"));
+  modal.show();
+}
+
+function logout() {
+  localStorage.removeItem("admin");
+  location.href = "admin-login.html";
+}
+</script>
+</body>
+</html>

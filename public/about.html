@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About Us - Milan Papad</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold text-brown" href="index.html">Milan Papad</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="events.html">Events</a></li>
+          <li class="nav-item"><a class="nav-link" href="user-profile.html">Profile</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+          <li class="nav-item"><a class="nav-link" href="admin-login.html">Admin Login</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" onclick="logout()">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+<section class="py-5">
+  <div class="container">
+    <h2 class="text-center text-brown mb-4">About Milan Papad</h2>
+    <p class="w-75 mx-auto text-center">
+      Milan Papad is not just a food brand – it's a tradition, a culture, and a livelihood. Founded in 1995 by a group of determined women in Gujarat, Milan Papad started with the aim of preserving the authentic taste of hand-rolled papads while empowering rural women. Today, Milan Papad has become a household name known for its unmatched crunch, flavor, and purity.
+    </p>
+    <div class="row mt-4">
+      <div class="col-md-6">
+        <h5 class="text-brown">Our Mission</h5>
+        <p>To promote traditional Indian snacks globally while ensuring quality, hygiene, and women empowerment at the grassroots level.</p>
+      </div>
+      <div class="col-md-6">
+        <h5 class="text-brown">Our Vision</h5>
+        <p>To be the most trusted brand in Indian households for authentic handmade snacks, supporting rural artisans and sustainability.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="bg-dark text-white py-3 text-center">
+  <p class="mb-0">&copy; 2025 Milan Papad. All rights reserved.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  function logout() {
+    localStorage.removeItem("user");
+    window.location.href = "user-login.html";
+  }
+  </script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

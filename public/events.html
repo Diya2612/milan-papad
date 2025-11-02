@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Events - Golden Harvest Papad</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    :root {
+      --primary: #2ecc71;
+      --accent: #27ae60;
+      --dark: #2c3e50;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 8rem 0 4rem;
+      text-align: center;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-header h1 { font-size: 4rem; font-weight: 800; margin-bottom: 1rem; }
+
+    .filter-section {
+      background: white;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      margin-bottom: 3rem;
+    }
+    .filter-btn {
+      padding: 0.8rem 2rem;
+      border: 2px solid var(--primary);
+      background: white;
+      color: var(--primary);
+      border-radius: 50px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      margin: 0.5rem;
+    }
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+    }
+
+    .search-box { position: relative; }
+    .search-box input {
+      padding: 1rem 1rem 1rem 3rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 50px;
+      width: 100%;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    .search-box input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(46, 204, 113, 0.1);
+      outline: none;
+    }
+    .search-box i {
+      position: absolute;
+      left: 1.2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #999;
+      font-size: 1.2rem;
+    }
+
+    .event-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+      transition: all 0.4s ease;
+      height: 100%;
+      border: 2px solid transparent;
+    }
+    .event-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+      border-color: var(--primary);
+    }
+    .event-image {
+      height: 220px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      color: white;
+      position: relative;
+    }
+    .event-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: white;
+      color: var(--primary);
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    }
+    .event-badge.workshop {
+      background: linear-gradient(135deg, #f093fb, #f5576c);
+      color: white;
+    }
+
+    .event-content { padding: 2rem; }
+    .event-title { font-size: 1.6rem; font-weight: 700; color: var(--dark); margin-bottom: 1rem; }
+    .event-meta { display: flex; gap: 1.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .event-meta-item { display: flex; align-items: center; gap: 0.5rem; color: #7f8c8d; font-size: 0.95rem; }
+    .event-meta-item i { color: var(--primary); }
+    .event-description { color: #555; line-height: 1.7; margin-bottom: 1.5rem; }
+
+    .event-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 1.5rem;
+      border-top: 2px solid #f0f0f0;
+    }
+    .event-price { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
+    .btn-register {
+      padding: 0.8rem 2rem;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 0.9rem;
+    }
+    .btn-register:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(46, 204, 113, 0.4); }
+
+    .registration-section {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #4facfe 100%);
+      padding: 6rem 0;
+    }
+    .registration-form {
+      background: white;
+      padding: 3rem;
+      border-radius: 25px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .form-group { margin-bottom: 1.5rem; }
+    .form-group label { font-weight: 600; color: var(--dark); margin-bottom: 0.5rem; display: block; }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 1rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(46, 204, 113, 0.1);
+      outline: none;
+    }
+    .error-text { color: #e74c3c; font-size: 0.85rem; margin-top: 0.5rem; display: block; }
+
+    .btn-submit {
+      width: 100%;
+      padding: 1.2rem;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      transition: all 0.4s ease;
+      margin-top: 1rem;
+    }
+    .btn-submit:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(46, 204, 113, 0.4); }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+        <i class="fas fa-fire-alt"></i> Golden Harvest Papad
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link active" href="events.html">Events</a></li>
+          <li class="nav-item"><a class="nav-link" href="user-profile.html">Profile</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="container">
+      <h1><i class="fas fa-calendar-alt me-3"></i>Upcoming Events</h1>
+      <p style="font-size: 1.3rem; opacity: 0.9;">Join our workshops, festivals, and community celebrations</p>
+    </div>
+  </section>
+
+  <!-- Filter + Search -->
+  <section class="py-5">
+    <div class="container">
+      <div class="filter-section">
+        <div class="row align-items-center">
+          <div class="col-lg-7 mb-3 mb-lg-0">
+            <div class="search-box">
+              <i class="fas fa-search"></i>
+              <input type="text" id="searchInput" placeholder="Search events by name or description...">
+            </div>
+          </div>
+          <div class="col-lg-5 text-lg-end">
+            <button class="filter-btn active" data-category="">All</button>
+            <button class="filter-btn" data-category="festival">Festivals</button>
+            <button class="filter-btn" data-category="workshop">Workshops</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4" id="eventsContainer">
+        <div class="col-12 text-center py-5">
+          <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;"></div>
+          <p class="mt-3 text-muted">Loading amazing events...</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Registration Form -->
+  <section class="registration-section">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="text-white fw-bold">Register for an Event</h2>
+        <p class="text-white">Fill out the form below to secure your spot</p>
+      </div>
+
+      <div class="registration-form">
+        <form id="eventForm">
+          <div class="form-group">
+            <label for="name"><i class="fas fa-user me-2"></i>Full Name</label>
+            <input type="text" id="name" placeholder="Enter your full name" required>
+            <span class="error-text" id="nameError"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="email"><i class="fas fa-envelope me-2"></i>Email</label>
+            <input type="email" id="email" placeholder="Enter your email" required>
+            <span class="error-text" id="emailError"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="mobile"><i class="fas fa-phone me-2"></i>Mobile Number</label>
+            <input type="tel" id="mobile" placeholder="Enter your 10-digit mobile number" required>
+            <span class="error-text" id="mobileError"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="event"><i class="fas fa-calendar-check me-2"></i>Select Event</label>
+            <select id="event" required>
+              <option value="">-- Choose an Event --</option>
+            </select>
+            <span class="error-text" id="eventError"></span>
+          </div>
+
+          <button type="submit" class="btn-submit">
+            <i class="fas fa-check-circle me-2"></i>Register Now
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer text-center py-4 bg-light">
+    <p>&copy; 2025 Golden Harvest Papad. All rights reserved.</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    let allEvents = [];
+    const icons = { festival: 'fa-star', workshop: 'fa-tools' };
+
+    async function loadEvents() {
+      const response = await fetch("/api/admin/events");
+      allEvents = await response.json();
+      renderEvents();
+      populateEventDropdown();
+    }
+
+    function renderEvents() {
+      const searchValue = document.getElementById("searchInput").value.toLowerCase();
+      const activeCategory = document.querySelector('.filter-btn.active').dataset.category;
+      const filtered = allEvents.filter(e =>
+        (e.title.toLowerCase().includes(searchValue) || e.description.toLowerCase().includes(searchValue)) &&
+        (activeCategory === "" || e.category === activeCategory)
+      );
+
+      const container = document.getElementById("eventsContainer");
+      container.innerHTML = filtered.length ? "" : `<div class="col-12 text-center py-5 text-muted"><i class="fas fa-calendar-times fa-3x mb-3"></i><h4>No events found</h4></div>`;
+
+      filtered.forEach(e => {
+        const card = document.createElement("div");
+        card.className = "col-lg-4 col-md-6";
+        card.innerHTML = `
+          <div class="event-card">
+            <div class="event-image">
+              <i class="fas ${icons[e.category] || 'fa-calendar'}"></i>
+              <div class="event-badge ${e.category}">${e.category}</div>
+            </div>
+            <div class="event-content">
+              <h3 class="event-title">${e.title}</h3>
+              <div class="event-meta-item"><i class="fas fa-calendar"></i>${e.date}</div>
+              <p class="event-description">${e.description || ''}</p>
+              <div class="event-footer">
+                <div class="event-price">Free</div>
+                <button class="btn-register" onclick="scrollToForm('${e._id}')">Register</button>
+              </div>
+            </div>
+          </div>`;
+        container.appendChild(card);
+      });
+    }
+
+    function populateEventDropdown() {
+      const dropdown = document.getElementById("event");
+      dropdown.innerHTML = '<option value="">-- Choose an Event --</option>';
+      allEvents.forEach(e => {
+        const opt = document.createElement("option");
+        opt.value = e._id;
+        opt.textContent = `${e.title} - ${e.date}`;
+        dropdown.appendChild(opt);
+      });
+    }
+
+    function scrollToForm(eventId) {
+      document.getElementById("event").value = eventId;
+      document.querySelector(".registration-section").scrollIntoView({ behavior: "smooth" });
+    }
+
+    document.querySelectorAll(".filter-btn").forEach(btn => {
+      btn.addEventListener("click", function() {
+        document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+        this.classList.add("active");
+        renderEvents();
+      });
+    });
+
+    document.getElementById("searchInput").addEventListener("input", renderEvents);
+
+    document.getElementById("eventForm").addEventListener("submit", async e => {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const mobile = document.getElementById("mobile").value.trim();
+      const eventId = document.getElementById("event").value;
+      document.querySelectorAll(".error-text").forEach(el => el.textContent = "");
+
+      let valid = true;
+      if (name.length < 3) { document.getElementById("nameError").textContent = "Enter valid name"; valid = false; }
+      if (!/^[^ ]+@[^ ]+\.[a-z]{2,3}$/.test(email)) { document.getElementById("emailError").textContent = "Enter valid email"; valid = false; }
+      if (!/^[6-9]\d{9}$/.test(mobile)) {
+  document.getElementById("mobileError").textContent = "Enter valid number";
+  valid = false;
+}
+
+      if (!eventId) { document.getElementById("eventError").textContent = "Select an event"; valid = false; }
+
+      if (!valid) return;
+
+      const selectedEvent = allEvents.find(e => e._id === eventId);
+      const res = await fetch("/api/register/event", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, mobile, eventId, eventTitle: selectedEvent?.title || "Unknown" })
+      });
+
+      if (res.ok) {
+        alert("✅ Registration successful!");
+        e.target.reset();
+      } else {
+        alert("❌ Registration failed.");
+      }
+    });
+
+    window.addEventListener("DOMContentLoaded", loadEvents);
+  </script>
+</body>
+</html>
