@@ -1,0 +1,55 @@
+cat > README.md << 'EOF'
+
+# Event Management System
+
+Full-stack event management application with Node.js, Express, and MongoDB Atlas.
+
+## Features
+
+- 👤 User Registration & Management
+- 📅 Event Management
+- 👨‍💼 Admin Dashboard
+- ☁️ MongoDB Atlas Cloud Database
+
+## Tech Stack
+
+- **Frontend:** HTML5, CSS3, JavaScript
+- **Backend:** Node.js, Express.js
+- **Database:** MongoDB Atlas
+- **Deployment:** DigitalOcean
+
+## Installation
+
+```bash
+# Clone repository
+git clone https://github.com/Diya2612/7th-assignment-copy.git
+cd 7th-assignment-copy
+
+# Install dependencies
+cd server
+npm install
+
+# Create .env file
+cp .env.example .env
+# Edit .env with your MongoDB URI
+
+# Start server
+npm start
+```
+
+## Environment Variables
+
+- `PORT` - Server port (default: 3000)
+- `NODE_ENV` - Environment (development/production)
+- `MONGODB_URI` - MongoDB Atlas connection string
+- `JWT_SECRET` - JWT secret key
+- `SESSION_SECRET` - Session secret key
+
+## Author
+
+Diya - [GitHub](https://github.com/Diya2612)
+
+## License
+
+MIT
+EOF

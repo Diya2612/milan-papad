@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const path = require("path");
+require('dotenv').config(); // Add this line
 const connectDB = require("./config/db");
 
 const app = express();
@@ -23,6 +24,11 @@ const userRoutes = require("./routes/user");
 app.use("/api/register", registrationRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/user", userRoutes);
+
+// Health check
+app.get("/api/health", (req, res) => {
+  res.json({ status: "ok", timestamp: new Date() });
+});
 
 // Serve static files from public directory
 app.use(express.static(path.join(__dirname, "..", "public")));
@@ -52,6 +58,5 @@ app.listen(PORT, () => {
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (err) => {
   console.error('Unhandled Promise Rejection:', err);
-  // Close server & exit process
   process.exit(1);
 });
